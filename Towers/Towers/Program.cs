@@ -56,10 +56,10 @@ namespace Towers
 
         static void BuildRandomTerrain()
         {
-            int minHeight = 5;
+            int minHeight = 0;
             int maxStep = 2;
             int maxHeight = 20;
-            int currentHeight = 15;
+            int currentHeight = 20;
             int nextHeight;
             Random rnd = new Random();
 
