@@ -9,10 +9,12 @@ namespace Towers
 {
     class Program
     {
-        static int terrainHeight = 70;
+        static int terrainHeight = 58;
         static int terrainWidth = 150;
         static int FirstTowerAngle = 45;
         static int SecondTowerAngle = 45;
+        static int firstTowerVelocity;
+        static int secondTowerVelocity;
         static bool activePlayer;
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
@@ -283,5 +285,59 @@ namespace Towers
             Console.SetCursorPosition(x, y);
             Console.Write(c);
         }
+
+        static void ModifyAngle(ConsoleKeyInfo key)
+        {
+            const int sencitivity = 5;
+            const int maxAngle = 90;
+            const int minAngle = -45;
+
+            if (key.Key == ConsoleKey.UpArrow && activePlayer == true && FirstTowerAngle < maxAngle)
+            {
+                FirstTowerAngle += sencitivity;
+            }
+            else if (key.Key == ConsoleKey.DownArrow && activePlayer == true && FirstTowerAngle > minAngle)
+            {
+                FirstTowerAngle -= sencitivity;
+            }
+            else if (key.Key == ConsoleKey.W && activePlayer == false && SecondTowerAngle < maxAngle)
+            {
+                SecondTowerAngle += sencitivity;
+            }
+            else if (key.Key == ConsoleKey.S && activePlayer == false && SecondTowerAngle > minAngle)
+            {
+                SecondTowerAngle -= sencitivity;
+            }
+        }
+
+        static void ModifyVelocity(ConsoleKeyInfo key)
+        {
+            const int sencitivity = 5;
+            const int maxVelocity = 100;
+            const int minVelocity = 0;
+
+            if (key.Key == ConsoleKey.RightArrow && activePlayer == true && firstTowerVelocity < maxVelocity)
+            {
+                firstTowerVelocity += sencitivity;
+            }
+            else if (key.Key == ConsoleKey.LeftArrow && activePlayer == true && firstTowerVelocity > minVelocity)
+            {
+                firstTowerVelocity -= sencitivity;
+            }
+            else if (key.Key == ConsoleKey.D && activePlayer == false && secondTowerVelocity < maxVelocity)
+            {
+                firstTowerVelocity += sencitivity;
+            }
+            else if (key.Key == ConsoleKey.A && activePlayer == false && secondTowerVelocity > minVelocity)
+            {
+                firstTowerVelocity -= sencitivity;
+            }
+        }
+
+        static void PrintPanel()
+        { 
+        
+        }
+
     }
 }
