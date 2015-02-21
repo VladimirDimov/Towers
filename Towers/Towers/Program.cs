@@ -9,14 +9,15 @@ namespace Towers
 {
     class Program
     {
-        static int terrainHeight = 40;
-        static int terrainWidth = 80;
+        static int terrainHeight = 70;
+        static int terrainWidth = 150;
         static int FirstTowerAngle = 45;
         static int SecondTowerAngle = 45;
         static bool activePlayer;
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
         static char[,] terrain;
+        private static int d1;
 
         static void Main()
         {
@@ -25,6 +26,8 @@ namespace Towers
             PrintFirstTower(10);
             PrintSecondTower(terrainWidth - 10);
             DrawTerrain();
+            BallMovement(7, 84, false);
+            PrintOnPosition(5, 47, 'N');
             //BuildRandomTerrain();
             while (true)
             {
@@ -56,10 +59,10 @@ namespace Towers
 
         static void BuildRandomTerrain()
         {
-            int minHeight = 20;
+            int minHeight = 35;
             int maxStep = 2;
-            int maxHeight = 35;
-            int currentHeight = 25;
+            int maxHeight = 60;
+            int currentHeight = 45;
             int nextHeight;
             Random rnd = new Random();
 
@@ -147,6 +150,81 @@ namespace Towers
         static void BallMovement(int velocity, int angle, bool activePlayer)
         {
             //return hitX and hitY;
+            int startingPointX = 0;
+            int startingPointY = 0;
+            if (activePlayer == true)
+            {
+                startingPointX = firstTowerCoordinates[1];
+                startingPointY = firstTowerCoordinates[0] - 5;
+            }
+            else if (activePlayer == false)
+            {
+                startingPointX = secondTowerCoordinates[1];
+                startingPointY = secondTowerCoordinates[0] - 5;
+            }
+            int oldX = startingPointX;
+            int oldY = startingPointY;
+            int x;
+            int y;
+            int g = 1;
+            double angleInRadians = angle * Math.PI / 180;
+
+            if (activePlayer == true)
+            {
+                for (float time = 0; time < 2000; time += 0.1f)
+                {
+                    x = startingPointX + (int)(velocity * time * Math.Cos(angleInRadians));
+                    y = (int)(startingPointY - (velocity * time * Math.Sin(angleInRadians) - (g * Math.Pow(time, 2)) / 2));
+                    if (x > terrainWidth - 1 || y < 0 || x < 0 || y > terrainHeight - 1)
+                    {
+                        return;
+                    }
+                    if (terrain[y + 2, x] == '#')
+                    {
+                        HitTerrain(y + 2, x);
+                        return;
+                    }
+                    if (terrain[y + 2, x] == '2')
+                    {
+                        HitTower(y + 2, x);
+                        return;
+                    }
+                    if ((x != oldX && y != oldY) || (x > oldX + 3))
+                    {
+                        PrintOnPosition(x, y, '.', ConsoleColor.White);
+                        oldX = x;
+                        oldY = y;
+                    }
+                }
+            }
+            else if (activePlayer == false)
+            {
+                for (float time = 0; time < 2000; time += 0.1f)
+                {
+                    x = startingPointX - (int)(velocity * time * Math.Cos(angleInRadians));
+                    y = (int)(startingPointY - (velocity * time * Math.Sin(angleInRadians) - (g * Math.Pow(time, 2)) / 2));
+                    if (x > terrainWidth - 1 || y < 0 || x < 0 || y > terrainHeight - 1)
+                    {
+                        return;
+                    }
+                    if (terrain[y + 2, x] == '#')
+                    {
+                        HitTerrain(y + 2, x);
+                        return;
+                    }
+                    if (terrain[y + 2, x] == '1')
+                    {
+                        HitTower(y + 2, x);
+                        return;
+                    }
+                    if ((x != oldX && y != oldY) || (x < oldX - 3))
+                    {
+                        PrintOnPosition(x, y, '.', ConsoleColor.White);
+                        oldX = x;
+                        oldY = y;
+                    }
+                }
+            }
         }
 
         static void DrawTerrain()
