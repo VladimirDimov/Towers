@@ -26,8 +26,8 @@ namespace Towers
             PrintFirstTower(10);
             PrintSecondTower(terrainWidth - 10);
             DrawTerrain();
-            BallMovement(7, 84, false);
-            PrintOnPosition(5, 47, 'N');
+            BallMovement(12, 30, false);
+            //PrintOnPosition(149, 69, 'N');
             //BuildRandomTerrain();
             while (true)
             {
@@ -39,7 +39,7 @@ namespace Towers
         {
             Console.BufferHeight = Console.WindowHeight = terrainHeight;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
-            terrain = new char[Console.WindowHeight, Console.WindowWidth];
+            terrain = new char[Console.WindowHeight , Console.WindowWidth];
         }
 
         static void SetGame()
@@ -154,16 +154,16 @@ namespace Towers
             int startingPointY = 0;
             if (activePlayer == true)
             {
-                startingPointX = firstTowerCoordinates[1];
+                startingPointX = firstTowerCoordinates[1] + 1;
                 startingPointY = firstTowerCoordinates[0] - 5;
             }
             else if (activePlayer == false)
             {
-                startingPointX = secondTowerCoordinates[1];
+                startingPointX = secondTowerCoordinates[1] - 2;
                 startingPointY = secondTowerCoordinates[0] - 5;
             }
-            int oldX = startingPointX;
-            int oldY = startingPointY;
+            int oldX = 0;
+            int oldY = 0;
             int x;
             int y;
             int g = 1;
@@ -179,14 +179,14 @@ namespace Towers
                     {
                         return;
                     }
-                    if (terrain[y + 2, x] == '#')
+                    if (terrain[y, x] == '#')
                     {
-                        HitTerrain(y + 2, x);
+                        HitTerrain(y, x);
                         return;
                     }
-                    if (terrain[y + 2, x] == '2')
+                    if (terrain[y, x] == '2')
                     {
-                        HitTower(y + 2, x);
+                        HitTower(y, x);
                         return;
                     }
                     if ((x != oldX && y != oldY) || (x > oldX + 3))
@@ -207,14 +207,14 @@ namespace Towers
                     {
                         return;
                     }
-                    if (terrain[y + 2, x] == '#')
+                    if (terrain[y, x] == '#')
                     {
-                        HitTerrain(y + 2, x);
+                        HitTerrain(y, x);
                         return;
                     }
-                    if (terrain[y + 2, x] == '1')
+                    if (terrain[y, x] == '1')
                     {
-                        HitTower(y + 2, x);
+                        HitTower(y, x);
                         return;
                     }
                     if ((x != oldX && y != oldY) || (x < oldX - 3))
@@ -236,7 +236,7 @@ namespace Towers
             {
                 for (int col = 0; col < terrainWidth; col++)
                 {
-                    if (terrain[row, col] == '#')
+                    if (terrain[row, col] == '#' && (row != terrainHeight -1 || col != terrainHeight - 1))
                     {
                         terrainBuilder.Append("#");
                     }
@@ -248,7 +248,7 @@ namespace Towers
                     {
                         terrainBuilder.Append("2");
                     }
-                    else
+                    else if (row != terrainHeight - 1 || col != terrainHeight - 1)
                     {
                         terrainBuilder.Append(" ");
                     }
@@ -257,7 +257,7 @@ namespace Towers
 
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(terrainBuilder.ToString());
+            Console.Write(terrainBuilder.ToString());
 
             //Draw Towers
             Console.CursorVisible = false;
@@ -267,11 +267,11 @@ namespace Towers
                 {
                     if (terrain[row, col] == '1')
                     {
-                        PrintOnPosition(col, row - 2, terrain[row, col], ConsoleColor.Red);
+                        PrintOnPosition(col, row, terrain[row, col], ConsoleColor.Red);
                     }
                     else if (terrain[row, col] == '2')
                     {
-                        PrintOnPosition(col, row - 2, terrain[row, col], ConsoleColor.Blue);
+                        PrintOnPosition(col, row, terrain[row, col], ConsoleColor.Blue);
                     }
                 }
             }
