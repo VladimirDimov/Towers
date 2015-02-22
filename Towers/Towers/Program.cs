@@ -9,13 +9,33 @@ namespace Towers
 {
     class Program
     {
+        //Keys
+        static ConsoleKey firstVelocityUpKey = ConsoleKey.D;
+        static ConsoleKey firstVelocityDownKey = ConsoleKey.A;
+        static ConsoleKey firstAngleUpKey = ConsoleKey.W;
+        static ConsoleKey firstAngleDownKey = ConsoleKey.S;
+        static ConsoleKey firstShootKey = ConsoleKey.Spacebar;
+
+        static ConsoleKey secondVelocityUpKey = ConsoleKey.LeftArrow;
+        static ConsoleKey secondVelocityDownKey = ConsoleKey.RightArrow;
+        static ConsoleKey secondAngleUpKey = ConsoleKey.UpArrow;
+        static ConsoleKey secondAngleDownKey = ConsoleKey.DownArrow;
+        static ConsoleKey secondShootKey = ConsoleKey.Enter;
+
+
+        static string firstPlayerName = "Player 1";
+        static string secondPlayerName = "Player 2";
+        static int firstPlayerScore = 0;
+        static int secondPlayerScore = 0;
         static int terrainHeight = 58;
         static int terrainWidth = 150;
-        static int FirstTowerAngle = 45;
-        static int SecondTowerAngle = 45;
-        static int firstTowerVelocity;
-        static int secondTowerVelocity;
-        static bool activePlayer;
+        static int firstTowerAngle = 45;
+        static int secondTowerAngle = 45;
+        static int firstTowerVelocity = 50;
+        static int secondTowerVelocity = 50;
+        static int firstPlayerLivePoints = 100;
+        static int secondPlayerLivePoints = 100;
+        static bool activePlayer = false;
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
         static char[,] terrain;
@@ -33,6 +53,11 @@ namespace Towers
             //BuildRandomTerrain();
             while (true)
             {
+                if (Console.KeyAvailable)
+                {
+                    KeyPress(Console.ReadKey());
+                }
+                PrintPanel();
                 Thread.Sleep(150);
             }
         }
@@ -41,7 +66,7 @@ namespace Towers
         {
             Console.BufferHeight = Console.WindowHeight = terrainHeight;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
-            terrain = new char[Console.WindowHeight , Console.WindowWidth];
+            terrain = new char[Console.WindowHeight, Console.WindowWidth];
         }
 
         static void SetGame()
@@ -238,7 +263,7 @@ namespace Towers
             {
                 for (int col = 0; col < terrainWidth; col++)
                 {
-                    if (terrain[row, col] == '#' && (row != terrainHeight -1 || col != terrainHeight - 1))
+                    if (terrain[row, col] == '#' && (row != terrainHeight - 1 || col != terrainHeight - 1))
                     {
                         terrainBuilder.Append("#");
                     }
@@ -292,21 +317,21 @@ namespace Towers
             const int maxAngle = 90;
             const int minAngle = -45;
 
-            if (key.Key == ConsoleKey.UpArrow && activePlayer == true && FirstTowerAngle < maxAngle)
+            if (key.Key == firstAngleUpKey && activePlayer == true && firstTowerAngle < maxAngle)
             {
-                FirstTowerAngle += sencitivity;
+                firstTowerAngle += sencitivity;
             }
-            else if (key.Key == ConsoleKey.DownArrow && activePlayer == true && FirstTowerAngle > minAngle)
+            else if (key.Key == firstAngleDownKey && activePlayer == true && firstTowerAngle > minAngle)
             {
-                FirstTowerAngle -= sencitivity;
+                firstTowerAngle -= sencitivity;
             }
-            else if (key.Key == ConsoleKey.W && activePlayer == false && SecondTowerAngle < maxAngle)
+            else if (key.Key == secondAngleUpKey && activePlayer == false && secondTowerAngle < maxAngle)
             {
-                SecondTowerAngle += sencitivity;
+                secondTowerAngle += sencitivity;
             }
-            else if (key.Key == ConsoleKey.S && activePlayer == false && SecondTowerAngle > minAngle)
+            else if (key.Key == secondAngleDownKey && activePlayer == false && secondTowerAngle > minAngle)
             {
-                SecondTowerAngle -= sencitivity;
+                secondTowerAngle -= sencitivity;
             }
         }
 
@@ -316,28 +341,89 @@ namespace Towers
             const int maxVelocity = 100;
             const int minVelocity = 0;
 
-            if (key.Key == ConsoleKey.RightArrow && activePlayer == true && firstTowerVelocity < maxVelocity)
+            if (key.Key == firstVelocityUpKey && activePlayer == true && firstTowerVelocity < maxVelocity)
             {
                 firstTowerVelocity += sencitivity;
             }
-            else if (key.Key == ConsoleKey.LeftArrow && activePlayer == true && firstTowerVelocity > minVelocity)
+            else if (key.Key == firstVelocityDownKey && activePlayer == true && firstTowerVelocity > minVelocity)
             {
                 firstTowerVelocity -= sencitivity;
             }
-            else if (key.Key == ConsoleKey.D && activePlayer == false && secondTowerVelocity < maxVelocity)
+            else if (key.Key == secondVelocityDownKey && activePlayer == false && secondTowerVelocity < maxVelocity)
             {
-                firstTowerVelocity += sencitivity;
+                secondTowerVelocity += sencitivity;
             }
-            else if (key.Key == ConsoleKey.A && activePlayer == false && secondTowerVelocity > minVelocity)
+            else if (key.Key == secondVelocityUpKey && activePlayer == false && secondTowerVelocity > minVelocity)
             {
-                firstTowerVelocity -= sencitivity;
+                secondTowerVelocity -= sencitivity;
             }
         }
 
         static void PrintPanel()
-        { 
-        
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append('=', terrainWidth);
+            builder.Append(firstPlayerName);
+            builder.Append(new string(' ', terrainWidth - firstPlayerName.Length - secondPlayerName.Length));
+            builder.Append(secondPlayerName);
+
+            //Write current scores
+            string currentResult = string.Format("{0}  {1}:{2}  {3}", firstPlayerName, firstPlayerScore, secondPlayerScore, secondPlayerName);
+            builder.Append(' ', (terrainWidth - currentResult.Length) / 2);
+            builder.Append(currentResult);
+            builder.Append("\n");
+
+            //Print players live points
+            string firstPlayerLiveString = string.Format("Lives: {0}", firstPlayerLivePoints);
+            string secondPlayerLiveString = string.Format("Lives: {0}", secondPlayerLivePoints);
+            builder.Append(firstPlayerLiveString);
+            builder.Append(' ', terrainWidth - firstPlayerLiveString.Length - secondPlayerLiveString.Length);
+            builder.Append(secondPlayerLiveString);
+
+            //Prin players shooting angles
+            string firstTowerAngleString = string.Format("Angle: {0}", firstTowerAngle);
+            string secondTowerAngleString = string.Format("Angle: {0}", secondTowerAngle);
+            builder.Append(firstTowerAngleString);
+            builder.Append(' ', terrainWidth - firstTowerAngleString.Length - secondTowerAngleString.Length);
+            builder.Append(secondTowerAngleString);
+
+            //Print players shooting velocities
+            string firstTowerVelocityString = string.Format("Velocity: {0}", firstTowerVelocity);
+            string secondTowerVelocityString = string.Format("Velocity: {0}", secondTowerVelocity);
+            builder.Append(firstTowerVelocityString);
+            builder.Append(' ', terrainWidth - firstTowerVelocityString.Length - secondTowerVelocityString.Length);
+            builder.Append(secondTowerVelocityString);
+            //Draw line
+            builder.Append('=', terrainWidth);
+
+            Console.SetCursorPosition(0, 0);
+            Console.Write(builder.ToString());
         }
 
+        static void KeyPress(ConsoleKeyInfo keyPressed)
+        {
+            
+            if (keyPressed.Key == secondAngleUpKey || keyPressed.Key == secondAngleDownKey ||
+                keyPressed.Key == firstAngleUpKey || keyPressed.Key == firstAngleDownKey)
+            {
+                ModifyAngle(keyPressed);
+            }
+
+            if (keyPressed.Key == secondVelocityDownKey || keyPressed.Key == secondVelocityUpKey ||
+                keyPressed.Key == firstVelocityUpKey || keyPressed.Key == firstVelocityDownKey)
+            {
+                ModifyVelocity(keyPressed);
+            }
+
+            if(keyPressed.Key == firstShootKey)
+            {
+                //First player shoots
+            }
+
+            if (keyPressed.Key == secondShootKey)
+            {
+                //Second player shoots
+            }
+        }
     }
 }
