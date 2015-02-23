@@ -27,7 +27,7 @@ namespace Towers
         static string secondPlayerName = "Player 2";
         static int firstPlayerScore = 0;
         static int secondPlayerScore = 0;
-        static int terrainHeight = 58;
+        static int terrainHeight = 70;
         static int terrainWidth = 150;
         static int firstTowerAngle = 45;
         static int secondTowerAngle = 45;
@@ -49,7 +49,7 @@ namespace Towers
             PrintSecondTower(terrainWidth - 10);
             DrawTerrain();
             BallMovement(12, 30, false);
-            //PrintOnPosition(149, 69, 'N');
+            //PrintOnPosition(149, 64, 'N');
             //BuildRandomTerrain();
             while (true)
             {
@@ -64,9 +64,9 @@ namespace Towers
 
         static void SetConsole()
         {
-            Console.BufferHeight = Console.WindowHeight = terrainHeight;
+            Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
-            terrain = new char[Console.WindowHeight, Console.WindowWidth];
+            terrain = new char[terrainHeight, terrainWidth];
         }
 
         static void SetGame()
@@ -93,14 +93,14 @@ namespace Towers
             int nextHeight;
             Random rnd = new Random();
 
-            for (int col = 0; col < terrainWidth; col++)
+            for (int col = 0; col < terrain.GetLength(1); col++)
             {
                 do
                 {
                     nextHeight = rnd.Next(currentHeight - maxStep, currentHeight + maxStep + 1);
                 } while (!(minHeight <= nextHeight && nextHeight <= maxHeight));
                 currentHeight = nextHeight;
-                for (int row = currentHeight; row < terrainHeight; row++)
+                for (int row = currentHeight; row < terrain.GetLength(0); row++)
                 {
                     terrain[row, col] = '#';
                 }
@@ -218,7 +218,7 @@ namespace Towers
                     }
                     if ((x != oldX && y != oldY) || (x > oldX + 3))
                     {
-                        PrintOnPosition(x, y, '.', ConsoleColor.White);
+                        PrintOnPosition(x, y + 7, '.', ConsoleColor.White);
                         oldX = x;
                         oldY = y;
                     }
@@ -246,7 +246,7 @@ namespace Towers
                     }
                     if ((x != oldX && y != oldY) || (x < oldX - 3))
                     {
-                        PrintOnPosition(x, y, '.', ConsoleColor.White);
+                        PrintOnPosition(x, y + 7, '.', ConsoleColor.White);
                         oldX = x;
                         oldY = y;
                     }
@@ -282,7 +282,7 @@ namespace Towers
                 }
             }
 
-
+            Console.SetCursorPosition(0,7);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(terrainBuilder.ToString());
 
@@ -294,11 +294,11 @@ namespace Towers
                 {
                     if (terrain[row, col] == '1')
                     {
-                        PrintOnPosition(col, row, terrain[row, col], ConsoleColor.Red);
+                        PrintOnPosition(col, row + 7, terrain[row, col], ConsoleColor.Red);
                     }
                     else if (terrain[row, col] == '2')
                     {
-                        PrintOnPosition(col, row, terrain[row, col], ConsoleColor.Blue);
+                        PrintOnPosition(col, row + 7, terrain[row, col], ConsoleColor.Blue);
                     }
                 }
             }
