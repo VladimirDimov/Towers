@@ -31,8 +31,8 @@ namespace Towers
         static int terrainWidth = 150;
         static int firstTowerAngle = 45;
         static int secondTowerAngle = 45;
-        static int firstTowerVelocity = 50;
-        static int secondTowerVelocity = 50;
+        static int firstTowerVelocity = 0;
+        static int secondTowerVelocity = 0;
         static int firstPlayerLivePoints = 100;
         static int secondPlayerLivePoints = 100;
         static bool activePlayer = false;
@@ -43,22 +43,26 @@ namespace Towers
 
         static void Main()
         {
-            SetConsole();
-            BuildRandomTerrain();
-            PrintFirstTower(10);
-            PrintSecondTower(terrainWidth - 10);
-            DrawTerrain();
-            BallMovement(12, 30, false);
-            //PrintOnPosition(149, 64, 'N');
-            //BuildRandomTerrain();
+            SetGame();
             while (true)
             {
-                if (Console.KeyAvailable)
-                {
-                    KeyPress(Console.ReadKey());
-                }
+                DrawTerrain();
                 PrintPanel();
-                Thread.Sleep(150);
+                try
+                {
+                    while (true)
+                    {
+                        if (Console.KeyAvailable)
+                        {
+                            KeyPress(Console.ReadKey());
+                            PrintPanel();
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Shoot();
+                }
             }
         }
 
@@ -71,7 +75,10 @@ namespace Towers
 
         static void SetGame()
         {
-
+            SetConsole();
+            BuildRandomTerrain();
+            PrintFirstTower(10);
+            PrintSecondTower(terrainWidth - 10);
         }
 
         static void Menu()
@@ -153,10 +160,17 @@ namespace Towers
             }
         }
 
-        static void ActivePlayer(bool activePlayer)
+        static void Shoot()
         {
-            //  return shooting parameters (velocity, angle, ...);
-
+            if (activePlayer == true)
+            {
+                BallMovement(firstTowerVelocity, firstTowerAngle, activePlayer);
+            }
+            else
+            {
+                BallMovement(secondTowerVelocity, secondTowerAngle, activePlayer);
+            }
+            activePlayer = !activePlayer;
         }
 
         static void HitTerrain(int hitX, int hitY)
@@ -216,12 +230,10 @@ namespace Towers
                         HitTower(y, x);
                         return;
                     }
-                    if ((x != oldX && y != oldY) || (x > oldX + 3))
-                    {
-                        PrintOnPosition(x, y + 7, '.', ConsoleColor.White);
+                        Thread.Sleep(30);
+                        PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
                         oldX = x;
                         oldY = y;
-                    }
                 }
             }
             else if (activePlayer == false)
@@ -244,12 +256,10 @@ namespace Towers
                         HitTower(y, x);
                         return;
                     }
-                    if ((x != oldX && y != oldY) || (x < oldX - 3))
-                    {
-                        PrintOnPosition(x, y + 7, '.', ConsoleColor.White);
+                        Thread.Sleep(30);
+                        PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
                         oldX = x;
-                        oldY = y;
-                    }
+                        oldY = y;                    
                 }
             }
         }
@@ -282,7 +292,7 @@ namespace Towers
                 }
             }
 
-            Console.SetCursorPosition(0,7);
+            Console.SetCursorPosition(0, 7);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(terrainBuilder.ToString());
 
@@ -337,9 +347,9 @@ namespace Towers
 
         static void ModifyVelocity(ConsoleKeyInfo key)
         {
-            const int sencitivity = 5;
-            const int maxVelocity = 100;
-            const int minVelocity = 0;
+            const int sencitivity = 1;
+            const int maxVelocity = 15;
+            const int minVelocity = 2;
 
             if (key.Key == firstVelocityUpKey && activePlayer == true && firstTowerVelocity < maxVelocity)
             {
@@ -397,12 +407,13 @@ namespace Towers
             builder.Append('=', terrainWidth);
 
             Console.SetCursorPosition(0, 0);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(builder.ToString());
         }
 
         static void KeyPress(ConsoleKeyInfo keyPressed)
         {
-            
+
             if (keyPressed.Key == secondAngleUpKey || keyPressed.Key == secondAngleDownKey ||
                 keyPressed.Key == firstAngleUpKey || keyPressed.Key == firstAngleDownKey)
             {
@@ -415,14 +426,9 @@ namespace Towers
                 ModifyVelocity(keyPressed);
             }
 
-            if(keyPressed.Key == firstShootKey)
+            if ((keyPressed.Key == firstShootKey && activePlayer == true) || (keyPressed.Key == secondShootKey && activePlayer == false))
             {
-                //First player shoots
-            }
-
-            if (keyPressed.Key == secondShootKey)
-            {
-                //Second player shoots
+                throw new Exception();
             }
         }
     }
