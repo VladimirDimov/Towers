@@ -240,7 +240,24 @@ namespace Towers
 
         static void HitTerrain(int hitX, int hitY)
         {
-
+            if (hitX < terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
+            {
+                StringBuilder hitLine = new StringBuilder("###");
+                //print explosion
+                PrintOnPosition(hitY - 1, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 8, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX + 1; i++)
+                {
+                    for (int j = hitY - 1; j <= hitY + 1; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(3000);
+            }
+            //other possibilities
         }
 
         static void HitTower(int hitX, int hitY)
@@ -250,7 +267,14 @@ namespace Towers
 
         static void Impact(int hitX, int hitY)
         {
-
+            if (terrain[hitX, hitY] == '#')
+            {
+                HitTerrain(hitX, hitY);
+            }
+            else if (terrain[hitX, hitY] == '1' || terrain[hitX, hitY] == '2')
+            {
+                HitTower(hitX, hitY);
+            }
         }
 
         static void BallMovement(int velocity, int angle, bool activePlayer)
@@ -285,11 +309,12 @@ namespace Towers
                     {
                         return;
                     }
-                    if (terrain[y, x] == '#')
+                    if (terrain[y, x] == '#' || terrain[y, x] == '2')
                     {
-                        HitTerrain(y, x);
+                        Impact(y, x);
                         return;
                     }
+<<<<<<< HEAD
                     if (terrain[y, x] == '2')
                     {
                         HitTower(y, x);
@@ -297,6 +322,10 @@ namespace Towers
                     }
                     Thread.Sleep(30);
                     PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
+=======
+                    Thread.Sleep(20);
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
+>>>>>>> f9f2c59625b66ab81548d8e93e5be75fb44ee2a6
                     oldX = x;
                     oldY = y;
                 }
@@ -311,18 +340,18 @@ namespace Towers
                     {
                         return;
                     }
-                    if (terrain[y, x] == '#')
+                    if (terrain[y, x] == '#' || terrain[y, x] == '1')
                     {
-                        HitTerrain(y, x);
+                        Impact(y, x);
                         return;
                     }
-                    if (terrain[y, x] == '1')
-                    {
-                        HitTower(y, x);
-                        return;
-                    }
+<<<<<<< HEAD
                     Thread.Sleep(30);
                     PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
+=======
+                    Thread.Sleep(20);
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
+>>>>>>> f9f2c59625b66ab81548d8e93e5be75fb44ee2a6
                     oldX = x;
                     oldY = y;
                 }
@@ -369,17 +398,17 @@ namespace Towers
                 {
                     if (terrain[row, col] == '1')
                     {
-                        PrintOnPosition(col, row + 7, terrain[row, col], ConsoleColor.Red);
+                        PrintOnPosition(col, row + 7, terrain[row, col].ToString(), ConsoleColor.Red);
                     }
                     else if (terrain[row, col] == '2')
                     {
-                        PrintOnPosition(col, row + 7, terrain[row, col], ConsoleColor.Blue);
+                        PrintOnPosition(col, row + 7, terrain[row, col].ToString(), ConsoleColor.Blue);
                     }
                 }
             }
         }
 
-        static void PrintOnPosition(int x, int y, char c, ConsoleColor color = ConsoleColor.White)
+        static void PrintOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
