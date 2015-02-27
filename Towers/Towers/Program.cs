@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
@@ -43,6 +43,7 @@ namespace Towers
 
         static void Main()
         {
+            Menu();
             SetGame();
             while (true)
             {
@@ -83,7 +84,28 @@ namespace Towers
 
         static void Menu()
         {
-
+            Console.Write("Enter Player One Name (if blank 'PLayer 1'): ");
+            string playerOneName = Console.ReadLine().Trim();
+            if (playerOneName.Length == 0)
+            {
+                firstPlayerName = "Player 1";
+            }
+            else
+            {
+                firstPlayerName = playerOneName;
+            }
+            
+            Console.Write("Enter Player Two Name (if blank 'PLayer 2'): ");
+            string playerTwoName = Console.ReadLine().Trim();
+            if (playerTwoName.Length == 0)
+            {
+                secondPlayerName = "Player 2";
+            }
+            else
+            {
+                secondPlayerName = playerTwoName;
+            }
+            
         }
 
         static void BuildTerrainFromFile(char[,] terrain, string file)
