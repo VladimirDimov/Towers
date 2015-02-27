@@ -43,8 +43,8 @@ namespace Towers
 
         static void Main()
         {
-            Menu();
             SetGame();
+            Menu();
             while (true)
             {
                 DrawTerrain();
@@ -71,6 +71,7 @@ namespace Towers
         {
             Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
+            Console.Title = "TOWERS2015MadeByHornedDemons";
             terrain = new char[terrainHeight, terrainWidth];
         }
 
@@ -81,11 +82,52 @@ namespace Towers
             PrintFirstTower(10);
             PrintSecondTower(terrainWidth - 10);
         }
-
         static void Menu()
         {
-            Console.Write("Enter Player One Name (if blank 'PLayer 1'): ");
+            string gameName = "## T - O - W - E - R - S ##";
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 2, gameName.Length);
+            Console.WriteLine(gameName);
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 2);
+            Console.WriteLine("1. New Game");
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 4);
+            Console.WriteLine("2. Settings ");
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 6);
+            Console.WriteLine("3. Quit Game");
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 8);
+            Console.Write("Choose Option: ");
+
+            while (true)
+            {
+                ConsoleKeyInfo menuChoice = Console.ReadKey();
+                switch (menuChoice.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1: return;
+
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        SetPlayersNames(); return;
+
+                    case ConsoleKey.NumPad3:
+                    case ConsoleKey.D3:
+                        Environment.Exit(0);
+                        break;
+                }
+            }
+        }
+
+        static void SetPlayersNames()
+        {
+            string gameName = "## T - O - W - E - R - S ##";
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 10);
+            Console.Write("Enter Player One Name (default 'PLayer 1'): ");
+
             string playerOneName = Console.ReadLine().Trim();
+
             if (playerOneName.Length == 0)
             {
                 firstPlayerName = "Player 1";
@@ -94,8 +136,9 @@ namespace Towers
             {
                 firstPlayerName = playerOneName;
             }
-            
-            Console.Write("Enter Player Two Name (if blank 'PLayer 2'): ");
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 12);
+            Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
             string playerTwoName = Console.ReadLine().Trim();
             if (playerTwoName.Length == 0)
             {
@@ -105,7 +148,7 @@ namespace Towers
             {
                 secondPlayerName = playerTwoName;
             }
-            
+
         }
 
         static void BuildTerrainFromFile(char[,] terrain, string file)
@@ -252,10 +295,10 @@ namespace Towers
                         HitTower(y, x);
                         return;
                     }
-                        Thread.Sleep(30);
-                        PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
-                        oldX = x;
-                        oldY = y;
+                    Thread.Sleep(30);
+                    PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
+                    oldX = x;
+                    oldY = y;
                 }
             }
             else if (activePlayer == false)
@@ -278,10 +321,10 @@ namespace Towers
                         HitTower(y, x);
                         return;
                     }
-                        Thread.Sleep(30);
-                        PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
-                        oldX = x;
-                        oldY = y;                    
+                    Thread.Sleep(30);
+                    PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
+                    oldX = x;
+                    oldY = y;
                 }
             }
         }
