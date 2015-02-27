@@ -98,7 +98,7 @@ namespace Towers
             Console.WriteLine("3. Quit Game");
 
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 8);
-            Console.Write("Choose Option: ");
+            Console.Write("Choose Option (1, 2 or 3): ");
 
             while (true)
             {
@@ -314,18 +314,18 @@ namespace Towers
                         Impact(y, x);
                         return;
                     }
-<<<<<<< HEAD
+
                     if (terrain[y, x] == '2')
                     {
                         HitTower(y, x);
                         return;
                     }
                     Thread.Sleep(30);
-                    PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
-=======
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
+
                     Thread.Sleep(20);
                     PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
->>>>>>> f9f2c59625b66ab81548d8e93e5be75fb44ee2a6
+
                     oldX = x;
                     oldY = y;
                 }
@@ -345,15 +345,14 @@ namespace Towers
                         Impact(y, x);
                         return;
                     }
-<<<<<<< HEAD
+
                     Thread.Sleep(30);
-                    PrintOnPosition(x, y + 7, '*', ConsoleColor.White);
-=======
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
+
                     Thread.Sleep(20);
                     PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
->>>>>>> f9f2c59625b66ab81548d8e93e5be75fb44ee2a6
-                    oldX = x;
-                    oldY = y;
+
+                   
                 }
             }
         }
