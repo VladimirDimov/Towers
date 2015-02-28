@@ -240,6 +240,7 @@ namespace Towers
 
         static void HitTerrain(int hitX, int hitY)
         {
+            //hit only terrain
             if (hitX < terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
             {
                 StringBuilder hitLine = new StringBuilder("###");
@@ -255,9 +256,18 @@ namespace Towers
                         terrain[i, j] = ' ';
                     }
                 }
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
-            //other possibilities
+            //TO DO hit terrain left
+
+            //TO DO hit terrain right
+
+            //TO DO hit terrain left and down
+
+            //TO DO hit terrain right and down
+
+            //TO DO hit terrain down
+
         }
 
         static void HitTower(int hitX, int hitY)
@@ -292,8 +302,6 @@ namespace Towers
                 startingPointX = secondTowerCoordinates[1] - 2;
                 startingPointY = secondTowerCoordinates[0] - 5;
             }
-            int oldX = 0;
-            int oldY = 0;
             int x;
             int y;
             int g = 1;
@@ -320,14 +328,9 @@ namespace Towers
                         HitTower(y, x);
                         return;
                     }
-                    Thread.Sleep(30);
-                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
 
                     Thread.Sleep(20);
                     PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
-
-                    oldX = x;
-                    oldY = y;
                 }
             }
             else if (activePlayer == false)
@@ -346,13 +349,8 @@ namespace Towers
                         return;
                     }
 
-                    Thread.Sleep(30);
-                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
-
                     Thread.Sleep(20);
-                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
-
-                   
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);                  
                 }
             }
         }
