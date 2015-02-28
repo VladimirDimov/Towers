@@ -68,6 +68,7 @@ namespace Towers
                 }
             }
         }
+
         static void SetConsole()
         {
             Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
@@ -83,10 +84,9 @@ namespace Towers
             PrintFirstTower(10);
             PrintSecondTower(terrainWidth - 10);
         }
+
         static void Menu()
         {
-
-
             byte enterFlag = 0;
             while (true)
             {
@@ -94,7 +94,6 @@ namespace Towers
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
                 if (pressedKey.Key == ConsoleKey.DownArrow)
                 {
-
                     menuChoice += 1;
                 }
                 if (pressedKey.Key == ConsoleKey.UpArrow)
@@ -178,6 +177,7 @@ namespace Towers
             }
 
         }
+
         static void ColorLine(string value)
         {
             // This method writes an entire line to the console with the string.
@@ -220,7 +220,7 @@ namespace Towers
 
         static void BuildTerrainFromFile(char[,] terrain, string file)
         {
-
+            //TODO
         }
 
         static void BuildRandomTerrain()
@@ -296,11 +296,11 @@ namespace Towers
         {
             if (activePlayer == true)
             {
-                BallMovement(firstTowerVelocity, firstTowerAngle, activePlayer);
+                BallMovement(firstTowerVelocity/2.0, firstTowerAngle, activePlayer);
             }
             else
             {
-                BallMovement(secondTowerVelocity, secondTowerAngle, activePlayer);
+                BallMovement(secondTowerVelocity/2.0, secondTowerAngle, activePlayer);
             }
             activePlayer = !activePlayer;
         }
@@ -308,6 +308,7 @@ namespace Towers
         static void HitTerrain(int hitX, int hitY)
         {
             //hit only terrain
+            //TODO hit terrain next to tower
             if (hitX < terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
             {
                 StringBuilder hitLine = new StringBuilder("###");
@@ -325,16 +326,93 @@ namespace Towers
                 }
                 Thread.Sleep(1000);
             }
-            //TO DO hit terrain left
-
-            //TO DO hit terrain right
-
-            //TO DO hit terrain left and down
-
-            //TO DO hit terrain right and down
-
+            //hit terrain left
+            else if (hitX < terrain.GetLength(0) - 1 && hitY == 0)
+            {
+                StringBuilder hitLine = new StringBuilder("##");
+                //print explosion
+                PrintOnPosition(hitY, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY, hitX + 8, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX + 1; i++)
+                {
+                    for (int j = hitY; j <= hitY + 1; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(1000);
+            }
+            //hit terrain right
+            else if (hitX < terrain.GetLength(0) - 1 && hitY == terrain.GetLength(1) - 1)
+            {
+                StringBuilder hitLine = new StringBuilder("##");
+                //print explosion
+                PrintOnPosition(hitY - 1, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 8, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX + 1; i++)
+                {
+                    for (int j = hitY - 1; j <= hitY; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(1000);
+            }
+            //hit terrain left and down
+            else if (hitX == terrain.GetLength(0) - 1 && hitY == 0)
+            {
+                StringBuilder hitLine = new StringBuilder("##");
+                //print explosion
+                PrintOnPosition(hitY, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX; i++)
+                {
+                    for (int j = hitY; j <= hitY + 1; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(1000);
+            }
+            //hit terrain right and down
+            else if (hitX == terrain.GetLength(0) - 1 && hitY == terrain.GetLength(1) - 1)
+            {
+                StringBuilder hitLine = new StringBuilder("##");
+                //print explosion
+                PrintOnPosition(hitY - 1, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX; i++)
+                {
+                    for (int j = hitY - 1; j <= hitY; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(1000);
+            }
             //TO DO hit terrain down
-
+            else if (hitX == terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
+            {
+                StringBuilder hitLine = new StringBuilder("###");
+                //print explosion
+                PrintOnPosition(hitY - 1, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+                PrintOnPosition(hitY - 1, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+                //change terrain
+                for (int i = hitX - 1; i <= hitX; i++)
+                {
+                    for (int j = hitY - 1; j <= hitY + 1; j++)
+                    {
+                        terrain[i, j] = ' ';
+                    }
+                }
+                Thread.Sleep(1000);
+            }
         }
 
         static void HitTower(int hitX, int hitY)
@@ -354,7 +432,7 @@ namespace Towers
             }
         }
 
-        static void BallMovement(int velocity, int angle, bool activePlayer)
+        static void BallMovement(double velocity, int angle, bool activePlayer)
         {
             //return hitX and hitY;
             int startingPointX = 0;
@@ -483,7 +561,7 @@ namespace Towers
         {
             const int sencitivity = 5;
             const int maxAngle = 90;
-            const int minAngle = -45;
+            const int minAngle = 0;
 
             if (key.Key == firstAngleUpKey && activePlayer == true && firstTowerAngle < maxAngle)
             {
@@ -506,8 +584,8 @@ namespace Towers
         static void ModifyVelocity(ConsoleKeyInfo key)
         {
             const int sencitivity = 1;
-            const int maxVelocity = 15;
-            const int minVelocity = 2;
+            const int maxVelocity = 30;
+            const int minVelocity = 0;
 
             if (key.Key == firstVelocityUpKey && activePlayer == true && firstTowerVelocity < maxVelocity)
             {
