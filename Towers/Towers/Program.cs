@@ -39,7 +39,9 @@ namespace Towers
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
         static char[,] terrain;
-        private static int d1;
+        static byte menuChoice = 1;
+        static string gameName = "## T - O - W - E - R - S ##";
+
 
         static void Main()
         {
@@ -66,7 +68,6 @@ namespace Towers
                 }
             }
         }
-
         static void SetConsole()
         {
             Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
@@ -84,46 +85,112 @@ namespace Towers
         }
         static void Menu()
         {
-            string gameName = "## T - O - W - E - R - S ##";
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 2, gameName.Length);
-            Console.WriteLine(gameName);
 
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 2);
-            Console.WriteLine("1. New Game");
 
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 4);
-            Console.WriteLine("2. Settings ");
-
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 6);
-            Console.WriteLine("3. Quit Game");
-
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 8);
-            Console.Write("Choose Option (1, 2 or 3): ");
-
+            byte enterFlag = 0;
             while (true)
             {
-                ConsoleKeyInfo menuChoice = Console.ReadKey();
-                switch (menuChoice.Key)
+                DrawMenu();
+                ConsoleKeyInfo pressedKey = Console.ReadKey();
+                if (pressedKey.Key == ConsoleKey.DownArrow)
                 {
-                    case ConsoleKey.D1:
-                    case ConsoleKey.NumPad1: return;
 
-                    case ConsoleKey.D2:
-                    case ConsoleKey.NumPad2:
-                        SetPlayersNames(); return;
+                    menuChoice += 1;
+                }
+                if (pressedKey.Key == ConsoleKey.UpArrow)
+                {
+                    menuChoice -= 1;
+                }
+                if (pressedKey.Key == ConsoleKey.Enter)
+                {
+                    enterFlag = 1;
+                }
 
-                    case ConsoleKey.NumPad3:
-                    case ConsoleKey.D3:
-                        Environment.Exit(0);
+                if (menuChoice > 3)
+                {
+                    menuChoice = 1;
+                }
+                if (menuChoice < 1)
+                {
+                    menuChoice = 3;
+                }
+
+                switch (menuChoice)
+                {
+                    case 1:
+                        if (enterFlag == 1)
+                        {
+                            return;
+                        }
+                        break;
+                    case 2:
+                        if (enterFlag == 1)
+                        {
+                            SetPlayersNames();
+                            enterFlag = 0;
+                            return;
+                        }
+                        break;
+                    case 3:
+                        if (enterFlag == 1)
+                        {
+                            Environment.Exit(0);
+                        }
                         break;
                 }
+                Console.Clear();
             }
+        }
+
+        private static void DrawMenu()
+        {
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length - 6, gameName.Length);
+
+            Console.WriteLine(gameName);
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 2);
+            if (menuChoice == 1)
+            {
+                ColorLine(">New Game<");
+            }
+            else
+            {
+                Console.WriteLine("New Game");
+            }
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 4);
+            if (menuChoice == 2)
+            {
+                ColorLine(">Settings<");
+            }
+            else
+            {
+                Console.WriteLine("Settings");
+            }
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 6);
+            if (menuChoice == 3)
+            {
+                ColorLine(">Quit Game<");
+            }
+            else
+            {
+                Console.WriteLine("Quit Game");
+            }
+
+        }
+        static void ColorLine(string value)
+        {
+            // This method writes an entire line to the console with the string.
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(value);
+            // Reset the color.
+            Console.ResetColor();
         }
 
         static void SetPlayersNames()
         {
-            string gameName = "## T - O - W - E - R - S ##";
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 10);
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 9);
+
             Console.Write("Enter Player One Name (default 'PLayer 1'): ");
 
             string playerOneName = Console.ReadLine().Trim();
@@ -137,7 +204,7 @@ namespace Towers
                 firstPlayerName = playerOneName;
             }
 
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length / 4, gameName.Length + 12);
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 11);
             Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
             string playerTwoName = Console.ReadLine().Trim();
             if (playerTwoName.Length == 0)
@@ -352,7 +419,7 @@ namespace Towers
                     Thread.Sleep(20);
                     PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
 
-                   
+
                 }
             }
         }
