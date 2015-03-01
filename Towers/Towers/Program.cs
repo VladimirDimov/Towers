@@ -22,7 +22,8 @@ namespace Towers
         static ConsoleKey secondAngleDownKey = ConsoleKey.DownArrow;
         static ConsoleKey secondShootKey = ConsoleKey.Enter;
 
-
+        static Random rnd = new Random();
+        static int wind = 0;
         static string firstPlayerName = "Player 1";
         static string secondPlayerName = "Player 2";
         static int firstPlayerScore = 0;
@@ -76,6 +77,7 @@ namespace Towers
             {
                 DrawTerrain();
                 PrintPanel();
+                SetWind();
                 try
                 {
                     while (true)
@@ -256,7 +258,6 @@ namespace Towers
             int maxHeight = 60;
             int currentHeight = 45;
             int nextHeight;
-            Random rnd = new Random();
 
             for (int col = 0; col < terrain.GetLength(1); col++)
             {
@@ -340,11 +341,11 @@ namespace Towers
         {
             if (activePlayer == true)
             {
-                BallMovement(firstTowerVelocity / 2.0, firstTowerAngle, activePlayer);
+                BallMovement((firstTowerVelocity + wind) / 2.0, firstTowerAngle, activePlayer);
             }
             else
             {
-                BallMovement(secondTowerVelocity / 2.0, secondTowerAngle, activePlayer);
+                BallMovement((secondTowerVelocity-wind) / 2.0, secondTowerAngle, activePlayer);
             }
             activePlayer = !activePlayer;
         }
@@ -539,15 +540,9 @@ namespace Towers
                     {
                         continue;
                     }
-                    if (terrain[y, x] == '#' || terrain[y, x] == '2')
+                    if (terrain[y, x] == '#' || terrain[y, x] == '2' || terrain[y,x] == '1')
                     {
                         Impact(y, x);
-                        return;
-                    }
-
-                    if (terrain[y, x] == '2')
-                    {
-                        HitTower(y, x);
                         return;
                     }
 
@@ -565,7 +560,7 @@ namespace Towers
                     {
                         continue;
                     }
-                    if (terrain[y, x] == '#' || terrain[y, x] == '1')
+                    if (terrain[y, x] == '#' || terrain[y, x] == '1' || terrain[y, x] == '2')
                     {
                         Impact(y, x);
                         return;
@@ -663,7 +658,7 @@ namespace Towers
         static void ModifyVelocity(ConsoleKeyInfo key)
         {
             const int sencitivity = 1;
-            const int maxVelocity = 30;
+            const int maxVelocity = 40;
             const int minVelocity = 0;
 
             if (key.Key == firstVelocityUpKey && activePlayer == true && firstTowerVelocity < maxVelocity)
@@ -781,6 +776,26 @@ namespace Towers
                 Console.Write(yourTurn, Console.BackgroundColor = ConsoleColor.Blue);
             }
             Console.BackgroundColor = ConsoleColor.Black;
+        }
+
+        static void SetWind()
+        {
+            wind = rnd.Next(-10, 11);
+            string windInfo = string.Empty;
+            if (wind < 0)
+            {
+                windInfo = String.Format("Wind: <== {0}", -wind);
+            }
+            else if (wind == 0)
+            {
+                windInfo = String.Format("Wind: {0}", wind);
+            }
+            else
+            {
+                windInfo = String.Format("Wind: ==> {0}", wind);
+            }
+
+            PrintOnPosition(135, 8, windInfo, ConsoleColor.White);
         }
     }
 }
