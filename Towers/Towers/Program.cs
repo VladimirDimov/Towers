@@ -35,7 +35,7 @@ namespace Towers
         static int secondTowerVelocity = 0;
         static int firstPlayerLivePoints = 100;
         static int secondPlayerLivePoints = 100;
-        static bool activePlayer = false;
+        static bool activePlayer = true;
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
         static char[,] terrain;
@@ -57,7 +57,6 @@ namespace Towers
             Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
             Console.Title = "TOWERS2015MadeByHornedDemons";
-            terrain = new char[terrainHeight, terrainWidth];
         }
 
         static void SetGame()
@@ -242,6 +241,7 @@ namespace Towers
 
         static void BuildRandomTerrain()
         {
+            terrain = new char[terrainHeight, terrainWidth];
             int minHeight = 35;
             int maxStep = 2;
             int maxHeight = 60;
@@ -702,8 +702,8 @@ namespace Towers
             builder.Append(secondTowerAngleString);
 
             //Print players shooting velocities
-            string firstTowerVelocityString = string.Format("Velocity: {0}", firstTowerVelocity);
-            string secondTowerVelocityString = string.Format("Velocity: {0}", secondTowerVelocity);
+            string firstTowerVelocityString = string.Format("Power: {0}", firstTowerVelocity);
+            string secondTowerVelocityString = string.Format("Power: {0}", secondTowerVelocity);
             builder.Append(firstTowerVelocityString);
             builder.Append(' ', terrainWidth - firstTowerVelocityString.Length - secondTowerVelocityString.Length);
             builder.Append(secondTowerVelocityString);
