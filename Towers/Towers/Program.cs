@@ -46,8 +46,34 @@ namespace Towers
         static void Main()
         {
             SetGame();
-            Menu();
             while (true)
+            {
+                Game();
+            }
+        }
+
+        static void SetConsole()
+        {
+            Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
+            Console.BufferWidth = Console.WindowWidth = terrainWidth;
+            Console.Title = "TOWERS2015MadeByHornedDemons";
+            terrain = new char[terrainHeight, terrainWidth];
+        }
+
+        static void SetGame()
+        {
+            SetConsole();
+            Menu();
+        }
+
+        static void Game()
+        {
+            BuildRandomTerrain();
+            PrintFirstTower(10);
+            PrintSecondTower(terrainWidth - 10);
+            RestoreLivePoints();
+
+            while (firstPlayerLivePoints > 0 && secondPlayerLivePoints > 0)
             {
                 DrawTerrain();
                 PrintPanel();
@@ -67,22 +93,7 @@ namespace Towers
                     Shoot();
                 }
             }
-        }
-
-        static void SetConsole()
-        {
-            Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
-            Console.BufferWidth = Console.WindowWidth = terrainWidth;
-            Console.Title = "TOWERS2015MadeByHornedDemons";
-            terrain = new char[terrainHeight, terrainWidth];
-        }
-
-        static void SetGame()
-        {
-            SetConsole();
-            BuildRandomTerrain();
-            PrintFirstTower(10);
-            PrintSecondTower(terrainWidth - 10);
+            CheckForWinner();
         }
 
         static void Menu()
@@ -185,6 +196,12 @@ namespace Towers
             Console.WriteLine(value);
             // Reset the color.
             Console.ResetColor();
+        }
+
+        static void RestoreLivePoints()
+        {
+            firstPlayerLivePoints = 100;
+            secondPlayerLivePoints = 100;
         }
 
         static void SetPlayersNames()
@@ -292,15 +309,33 @@ namespace Towers
             }
         }
 
+        static void CheckForWinner()
+        {
+            string winner = string.Empty;
+            if (firstPlayerLivePoints <= 0)
+            {
+                winner = String.Format("{0} wins!!!", secondPlayerName);
+                ++secondPlayerScore;
+            }
+            else if (secondPlayerLivePoints <= 0)
+            {
+                winner = String.Format("{0} wins!!!", firstPlayerName);
+                ++firstPlayerScore;
+            }
+
+            PrintOnPosition(60, 30, winner, ConsoleColor.Cyan);
+            Thread.Sleep(3000);
+        }
+
         static void Shoot()
         {
             if (activePlayer == true)
             {
-                BallMovement(firstTowerVelocity/2.0, firstTowerAngle, activePlayer);
+                BallMovement(firstTowerVelocity / 2.0, firstTowerAngle, activePlayer);
             }
             else
             {
-                BallMovement(secondTowerVelocity/2.0, secondTowerAngle, activePlayer);
+                BallMovement(secondTowerVelocity / 2.0, secondTowerAngle, activePlayer);
             }
             activePlayer = !activePlayer;
         }
@@ -308,7 +343,6 @@ namespace Towers
         static void HitTerrain(int hitX, int hitY)
         {
             //hit only terrain
-            //TODO hit terrain next to tower
             if (hitX < terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
             {
                 StringBuilder hitLine = new StringBuilder("###");
@@ -321,7 +355,21 @@ namespace Towers
                 {
                     for (int j = hitY - 1; j <= hitY + 1; j++)
                     {
-                        terrain[i, j] = ' ';
+                        if (terrain[i, j] != '1' && terrain[i, j] != '2')
+                        {
+                            terrain[i, j] = ' ';
+                        }
+                        else //take damage
+                        {
+                            if (terrain[i, j] == '1')
+                            {
+                                firstPlayerLivePoints -= 20;
+                            }
+                            else if (terrain[i, j] == '2')
+                            {
+                                secondPlayerLivePoints -= 20;
+                            }
+                        }
                     }
                 }
                 Thread.Sleep(1000);
@@ -396,7 +444,7 @@ namespace Towers
                 }
                 Thread.Sleep(1000);
             }
-            //TO DO hit terrain down
+            //hit terrain down
             else if (hitX == terrain.GetLength(0) - 1 && hitY < terrain.GetLength(1) - 1 && hitY > 0)
             {
                 StringBuilder hitLine = new StringBuilder("###");
@@ -417,7 +465,27 @@ namespace Towers
 
         static void HitTower(int hitX, int hitY)
         {
-
+            StringBuilder hitLine = new StringBuilder("###");
+            //print explosion
+            PrintOnPosition(hitY - 1, hitX + 6, hitLine.ToString(), ConsoleColor.Yellow);
+            PrintOnPosition(hitY - 1, hitX + 7, hitLine.ToString(), ConsoleColor.Yellow);
+            PrintOnPosition(hitY - 1, hitX + 8, hitLine.ToString(), ConsoleColor.Yellow);
+            //take damage
+            for (int i = hitX - 1; i <= hitX + 1; i++)
+            {
+                for (int j = hitY - 1; j <= hitY + 1; j++)
+                {
+                    if (terrain[i, j] == '1')
+                    {
+                        firstPlayerLivePoints -= 20;
+                    }
+                    else if (terrain[i, j] == '2')
+                    {
+                        secondPlayerLivePoints -= 20;
+                    }
+                }
+            }
+            Thread.Sleep(1000);
         }
 
         static void Impact(int hitX, int hitY)
@@ -495,7 +563,7 @@ namespace Towers
                     }
 
                     Thread.Sleep(20);
-                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);                  
+                    PrintOnPosition(x, y + 7, "*", ConsoleColor.White);
                 }
             }
         }
@@ -620,8 +688,8 @@ namespace Towers
             builder.Append("\n");
 
             //Print players live points
-            string firstPlayerLiveString = string.Format("Lives: {0}", firstPlayerLivePoints);
-            string secondPlayerLiveString = string.Format("Lives: {0}", secondPlayerLivePoints);
+            string firstPlayerLiveString = string.Format("Health: {0}", firstPlayerLivePoints);
+            string secondPlayerLiveString = string.Format("Health: {0}", secondPlayerLivePoints);
             builder.Append(firstPlayerLiveString);
             builder.Append(' ', terrainWidth - firstPlayerLiveString.Length - secondPlayerLiveString.Length);
             builder.Append(secondPlayerLiveString);
