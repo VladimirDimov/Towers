@@ -333,7 +333,7 @@ namespace Towers
                 ++firstPlayerScore;
             }
 
-            PrintOnPosition(60, 30, winner, ConsoleColor.Cyan);
+            PrintOnPosition(72, 30, winner, ConsoleColor.Cyan);
             Thread.Sleep(3000);
         }
 
