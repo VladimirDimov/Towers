@@ -620,10 +620,11 @@ namespace Towers
 
         static void PrintOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.White)
         {
-            Console.BackgroundColor = ConsoleColor.Black;
+            //Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
             Console.Write(c);
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         static void ModifyAngle(ConsoleKeyInfo key)
@@ -717,21 +718,22 @@ namespace Towers
             Console.SetCursorPosition(0, 0);
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(builder.ToString());
-            ShowWhoseTurn();
 
             //highlight active player name
             if (activePlayer)
             {
+                Console.BackgroundColor = ConsoleColor.Red;
                 PrintOnPosition((terrainWidth - currentResult.Length) / 2, 2, firstPlayerName, ConsoleColor.Yellow);
+                Console.BackgroundColor = ConsoleColor.Black;
             }
             else
             {
+                Console.BackgroundColor = ConsoleColor.Blue;
                 PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5 
                     + firstPlayerScore.ToString().Length 
                     + secondPlayerScore.ToString().Length 
                     + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.Yellow);
             }
-
         }
 
         static void KeyPress(ConsoleKeyInfo keyPressed)
