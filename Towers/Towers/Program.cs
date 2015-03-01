@@ -16,8 +16,8 @@ namespace Towers
         static ConsoleKey firstAngleDownKey = ConsoleKey.S;
         static ConsoleKey firstShootKey = ConsoleKey.Spacebar;
 
-        static ConsoleKey secondVelocityUpKey = ConsoleKey.LeftArrow;
-        static ConsoleKey secondVelocityDownKey = ConsoleKey.RightArrow;
+        static ConsoleKey secondVelocityUpKey = ConsoleKey.RightArrow;
+        static ConsoleKey secondVelocityDownKey = ConsoleKey.LeftArrow;
         static ConsoleKey secondAngleUpKey = ConsoleKey.UpArrow;
         static ConsoleKey secondAngleDownKey = ConsoleKey.DownArrow;
         static ConsoleKey secondShootKey = ConsoleKey.Enter;
@@ -35,7 +35,7 @@ namespace Towers
         static int secondTowerVelocity = 0;
         static int firstPlayerLivePoints = 100;
         static int secondPlayerLivePoints = 100;
-        static bool activePlayer = false;
+        static bool activePlayer = true;
         static int[] firstTowerCoordinates = new int[2];
         static int[] secondTowerCoordinates = new int[2];
         static char[,] terrain;
@@ -57,7 +57,6 @@ namespace Towers
             Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
             Console.BufferWidth = Console.WindowWidth = terrainWidth;
             Console.Title = "TOWERS2015MadeByHornedDemons";
-            terrain = new char[terrainHeight, terrainWidth];
         }
 
         static void SetGame()
@@ -242,6 +241,7 @@ namespace Towers
 
         static void BuildRandomTerrain()
         {
+            terrain = new char[terrainHeight, terrainWidth];
             int minHeight = 35;
             int maxStep = 2;
             int maxHeight = 60;
@@ -620,6 +620,7 @@ namespace Towers
 
         static void PrintOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.White)
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
             Console.Write(c);
@@ -680,12 +681,15 @@ namespace Towers
             builder.Append(firstPlayerName);
             builder.Append(new string(' ', terrainWidth - firstPlayerName.Length - secondPlayerName.Length));
             builder.Append(secondPlayerName);
+            //
+            Console.BackgroundColor = ConsoleColor.DarkMagenta;
 
             //Write current scores
             string currentResult = string.Format("{0}  {1}:{2}  {3}", firstPlayerName, firstPlayerScore, secondPlayerScore, secondPlayerName);
             builder.Append(' ', (terrainWidth - currentResult.Length) / 2);
             builder.Append(currentResult);
-            builder.Append("\n");
+            builder.Append(' ', (terrainWidth - currentResult.Length) / 2 + 1);
+            //builder.Append("\n");
 
             //Print players live points
             string firstPlayerLiveString = string.Format("Health: {0}", firstPlayerLivePoints);
@@ -702,8 +706,8 @@ namespace Towers
             builder.Append(secondTowerAngleString);
 
             //Print players shooting velocities
-            string firstTowerVelocityString = string.Format("Velocity: {0}", firstTowerVelocity);
-            string secondTowerVelocityString = string.Format("Velocity: {0}", secondTowerVelocity);
+            string firstTowerVelocityString = string.Format("Power: {0}", firstTowerVelocity);
+            string secondTowerVelocityString = string.Format("Power: {0}", secondTowerVelocity);
             builder.Append(firstTowerVelocityString);
             builder.Append(' ', terrainWidth - firstTowerVelocityString.Length - secondTowerVelocityString.Length);
             builder.Append(secondTowerVelocityString);
@@ -714,6 +718,20 @@ namespace Towers
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(builder.ToString());
             ShowWhoseTurn();
+
+            //highlight active player name
+            if (activePlayer)
+            {
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2, 2, firstPlayerName, ConsoleColor.Yellow);
+            }
+            else
+            {
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5 
+                    + firstPlayerScore.ToString().Length 
+                    + secondPlayerScore.ToString().Length 
+                    + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.Yellow);
+            }
+
         }
 
         static void KeyPress(ConsoleKeyInfo keyPressed)
