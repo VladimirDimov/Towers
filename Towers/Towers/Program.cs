@@ -16,8 +16,8 @@ namespace Towers
         static ConsoleKey firstAngleDownKey = ConsoleKey.S;
         static ConsoleKey firstShootKey = ConsoleKey.Spacebar;
 
-        static ConsoleKey secondVelocityUpKey = ConsoleKey.LeftArrow;
-        static ConsoleKey secondVelocityDownKey = ConsoleKey.RightArrow;
+        static ConsoleKey secondVelocityUpKey = ConsoleKey.RightArrow;
+        static ConsoleKey secondVelocityDownKey = ConsoleKey.LeftArrow;
         static ConsoleKey secondAngleUpKey = ConsoleKey.UpArrow;
         static ConsoleKey secondAngleDownKey = ConsoleKey.DownArrow;
         static ConsoleKey secondShootKey = ConsoleKey.Enter;
@@ -620,6 +620,7 @@ namespace Towers
 
         static void PrintOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.White)
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
             Console.Write(c);
@@ -680,12 +681,15 @@ namespace Towers
             builder.Append(firstPlayerName);
             builder.Append(new string(' ', terrainWidth - firstPlayerName.Length - secondPlayerName.Length));
             builder.Append(secondPlayerName);
+            //
+            Console.BackgroundColor = ConsoleColor.DarkMagenta;
 
             //Write current scores
             string currentResult = string.Format("{0}  {1}:{2}  {3}", firstPlayerName, firstPlayerScore, secondPlayerScore, secondPlayerName);
             builder.Append(' ', (terrainWidth - currentResult.Length) / 2);
             builder.Append(currentResult);
-            builder.Append("\n");
+            builder.Append(' ', (terrainWidth - currentResult.Length) / 2 + 1);
+            //builder.Append("\n");
 
             //Print players live points
             string firstPlayerLiveString = string.Format("Health: {0}", firstPlayerLivePoints);
@@ -713,6 +717,19 @@ namespace Towers
             Console.SetCursorPosition(0, 0);
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(builder.ToString());
+
+            //highlight active player name
+            if (activePlayer)
+            {
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2, 2, firstPlayerName, ConsoleColor.Yellow);
+            }
+            else
+            {
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5 
+                    + firstPlayerScore.ToString().Length 
+                    + secondPlayerScore.ToString().Length 
+                    + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.Yellow);
+            }
         }
 
         static void KeyPress(ConsoleKeyInfo keyPressed)
