@@ -528,7 +528,7 @@ namespace Towers
                     y = (int)(startingPointY - (velocity * time * Math.Sin(angleInRadians) - (g * Math.Pow(time, 2)) / 2));
                     if (x > terrainWidth - 1 || y < 0 || x < 0 || y > terrainHeight - 1)
                     {
-                        return;
+                        continue;
                     }
                     if (terrain[y, x] == '#' || terrain[y, x] == '2')
                     {
@@ -554,7 +554,7 @@ namespace Towers
                     y = (int)(startingPointY - (velocity * time * Math.Sin(angleInRadians) - (g * Math.Pow(time, 2)) / 2));
                     if (x > terrainWidth - 1 || y < 0 || x < 0 || y > terrainHeight - 1)
                     {
-                        return;
+                        continue;
                     }
                     if (terrain[y, x] == '#' || terrain[y, x] == '1')
                     {
