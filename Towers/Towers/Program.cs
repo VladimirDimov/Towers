@@ -206,10 +206,13 @@ namespace Towers
         static void SetPlayersNames()
         {
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 9);
-
             Console.Write("Enter Player One Name (default 'PLayer 1'): ");
-
             string playerOneName = Console.ReadLine().Trim();
+
+            if (playerOneName.Length % 2 == 1)
+            {
+                playerOneName += " ";
+            }
 
             if (playerOneName.Length == 0)
             {
@@ -223,6 +226,12 @@ namespace Towers
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 11);
             Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
             string playerTwoName = Console.ReadLine().Trim();
+
+            if (playerTwoName.Length % 2 == 1)
+            {
+                playerTwoName += " ";
+            }
+
             if (playerTwoName.Length == 0)
             {
                 secondPlayerName = "Player 2";
