@@ -726,17 +726,17 @@ namespace Towers
             //highlight active player name
             if (activePlayer)
             {
-                Console.BackgroundColor = ConsoleColor.Red;
-                PrintOnPosition((terrainWidth - currentResult.Length) / 2, 2, firstPlayerName, ConsoleColor.Yellow);
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2, 2, firstPlayerName, ConsoleColor.White);
                 Console.BackgroundColor = ConsoleColor.Black;
             }
             else
             {
-                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
                 PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5 
                     + firstPlayerScore.ToString().Length 
                     + secondPlayerScore.ToString().Length 
-                    + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.Yellow);
+                    + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.White);
             }
         }
 
@@ -759,23 +759,6 @@ namespace Towers
             {
                 throw new Exception();
             }
-        }
-
-        static void ShowWhoseTurn()
-        {             
-            const string yourTurn = "YOUR TURN";
-            if (activePlayer == true)
-            {
-               
-                Console.SetCursorPosition(terrainWidth / 4, 3);
-                Console.Write(yourTurn, Console.BackgroundColor = ConsoleColor.Red);
-            }
-            else
-            {
-                Console.SetCursorPosition(terrainWidth / 4*3, 3);
-                Console.Write(yourTurn, Console.BackgroundColor = ConsoleColor.Blue);
-            }
-            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         static void SetWind()
