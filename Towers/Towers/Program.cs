@@ -713,6 +713,7 @@ namespace Towers
             Console.SetCursorPosition(0, 0);
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(builder.ToString());
+            ShowWhoseTurn();
         }
 
         static void KeyPress(ConsoleKeyInfo keyPressed)
@@ -734,6 +735,23 @@ namespace Towers
             {
                 throw new Exception();
             }
+        }
+
+        static void ShowWhoseTurn()
+        {             
+            const string yourTurn = "YOUR TURN";
+            if (activePlayer == true)
+            {
+               
+                Console.SetCursorPosition(terrainWidth / 4, 3);
+                Console.Write(yourTurn, Console.BackgroundColor = ConsoleColor.Red);
+            }
+            else
+            {
+                Console.SetCursorPosition(terrainWidth / 4*3, 3);
+                Console.Write(yourTurn, Console.BackgroundColor = ConsoleColor.Blue);
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 }
