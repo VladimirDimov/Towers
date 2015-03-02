@@ -42,7 +42,8 @@ namespace Towers
         static char[,] terrain;
         static byte menuChoice = 1;
         static string gameName = "## T - O - W - E - R - S ##";
-        static bool isRandomTerrain = false;
+        static ConsoleKeyInfo pressedKey;
+        static bool isRandomTerrain = true;
 
         static void Main()
         {
@@ -107,10 +108,12 @@ namespace Towers
         static void Menu()
         {
             byte enterFlag = 0;
+           
             while (true)
             {
+                Console.Clear();
                 DrawMenu();
-                ConsoleKeyInfo pressedKey = Console.ReadKey();
+                pressedKey = Console.ReadKey();
                 if (pressedKey.Key == ConsoleKey.DownArrow)
                 {
                     menuChoice += 1;
@@ -124,13 +127,13 @@ namespace Towers
                     enterFlag = 1;
                 }
 
-                if (menuChoice > 4)
+                if (menuChoice > 5)
                 {
                     menuChoice = 1;
                 }
                 if (menuChoice < 1)
                 {
-                    menuChoice = 4;
+                    menuChoice = 5;
                 }
 
                 switch (menuChoice)
@@ -152,18 +155,164 @@ namespace Towers
                     case 3:
                         if (enterFlag == 1)
                         {
-                            Environment.Exit(0);
-                        }
-                        break;
-                    case 4:
-                        if (enterFlag == 1)
-                        {
                             SetBuildTerrain();
                         }
                         break;
+
+                    case 4:
+                        if (enterFlag == 1)
+                        {
+                            HowToPlay();
+                        }
+                        break;
+                    case 5:
+                        if (enterFlag == 1)
+                        {
+                            Environment.Exit(0);
+                        }
+                        break;
+
                 }
                 Console.Clear();
             }
+        }
+
+        private static void HowToPlay()
+        {
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(@"         _______   _____  ____	  ____  ______   _____    _______   ");
+            Console.WriteLine(@"        |__   __| / ___ \ \   \__/   / |  ____| |     \  |       |    ");
+            Console.WriteLine(@"           | |   | |   | | \        /  |  |___  | |_\ / _|__  ___|   ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(@"           | |   | |___| |  \  /\  /   |  ___|  |     \ | _|    |  ");
+            Console.WriteLine(@"           |_|    \_____/    \/  \/    |______| |__/\__\|_______|  ");
+
+            Console.WriteLine();
+            Console.WriteLine("                              HOW TO PLAY!!!");
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+            Console.WriteLine("\t\t   Your mission is to destroy the enemy.");
+            Console.WriteLine(new string('-', 80));
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\t\t\t\tShoot");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            string firstPlayerName = " Player one:";
+            Console.Write("{0, 17}", firstPlayerName);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            string secondPlayerName = "\tPlayer Two:\n";
+            Console.WriteLine("{0, 40}", secondPlayerName);
+
+
+            string line = " ---";
+
+            //Shoot buttons
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0}{0}\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("\t{0}{0}", line);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t| SPACE |\t\t\t\t");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("| ENTER |\t\t\t\t");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0}{0}\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("\t{0}{0}", line);
+
+            //POWER
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n\n    But before you shoot you have to set your power and the angle of shooting.\n");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            string actionPower = "\t    Change Power";
+            string rangePower = "\t\tRange between 0 - 30";
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("{0, 35}", actionPower);
+            Console.WriteLine("{0, 35}", rangePower);
+
+
+            //Power buttons
+            char rightNarrow = (char)16;
+            char leftNarrow = (char)17;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("   {0}     {0}\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" \t {0}\t  {0}", line);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("   | A |    | D |\t\t\t\t");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" | {0} |    | {1} |", leftNarrow, rightNarrow);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("   {0}\t    {0}\t\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" {0}\t  {0}\n\n", line);
+
+            //ANGLE
+            Console.ForegroundColor = ConsoleColor.Green;
+            string changeAngleText = "\t   Change angle";
+            string rangeAngleText = "\t\tRange between 0 - 90";
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("{0, 35}", changeAngleText);
+            Console.WriteLine("{0, 35}", rangeAngleText);
+            Console.WriteLine();
+
+            //Angle buttons
+            char upNarrow = (char)30;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0} \t\t\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" {0}", line);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t| W |\t\t\t\t\t");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" | {0} |", upNarrow);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0} \t\t\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" {0}", line);
+
+            char downNarrow = (char)31;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0} \t\t\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" {0}", line);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t| S |\t\t\t\t\t");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" | {0} |", downNarrow);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\t{0} \t\t\t\t\t", line);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" {0}", line);
+
+            //WIND
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n\t\t\tDon't forget the wind!\n\t\t\t     Good luck!");
+
+            Console.ResetColor();
+            Console.WriteLine();
+            while (true)
+            {
+
+                pressedKey = Console.ReadKey();
+                if (pressedKey.Key == ConsoleKey.Escape)
+                {
+                    Menu();
+                }
+            }
+
         }
 
         private static void DrawMenu()
@@ -194,6 +343,26 @@ namespace Towers
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 6);
             if (menuChoice == 3)
             {
+                ColorLine(">Build Map<");
+            }
+            else
+            {
+                Console.WriteLine("Build Map");
+            }
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 8);
+            if (menuChoice == 4)
+            {
+                ColorLine(">How To Play<");
+            }
+            else
+            {
+                Console.WriteLine("How To Play");
+            }
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 10);
+            if (menuChoice == 5)
+            {
                 ColorLine(">Quit Game<");
             }
             else
@@ -201,15 +370,7 @@ namespace Towers
                 Console.WriteLine("Quit Game");
             }
 
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 8);
-            if (menuChoice == 4)
-            {
-                ColorLine(">Build Map<");
-            }
-            else
-            {
-                Console.WriteLine("Build Map");
-            }
+
 
         }
 
@@ -230,67 +391,97 @@ namespace Towers
 
         static void SetPlayersNames()
         {
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 9);
-            Console.Write("Enter Player One Name (default 'PLayer 1'): ");
-            string playerOneName = Console.ReadLine().Trim();
+            Console.Clear();
+            while (true)
+            {
+                Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 9);
+                Console.Write("Enter Player One Name (default 'PLayer 1'): ");
+                string playerOneName = Console.ReadLine().Trim();
 
-            if (playerOneName.Length % 2 == 1)
-            {
-                playerOneName += " ";
-            }
+                if (playerOneName.Length % 2 == 1)
+                {
+                    playerOneName += " ";
+                }
 
-            if (playerOneName.Length == 0)
-            {
-                firstPlayerName = "Player 1";
-            }
-            else
-            {
-                firstPlayerName = playerOneName;
-            }
+                if (playerOneName.Length == 0)
+                {
+                    firstPlayerName = "Player 1";
+                }
+                else
+                {
+                    firstPlayerName = playerOneName;
+                }
 
-            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 11);
-            Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
-            string playerTwoName = Console.ReadLine().Trim();
+                Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 11);
+                Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
+                string playerTwoName = Console.ReadLine().Trim();
 
-            if (playerTwoName.Length % 2 == 1)
-            {
-                playerTwoName += " ";
-            }
+                if (playerTwoName.Length % 2 == 1)
+                {
+                    playerTwoName += " ";
+                }
 
-            if (playerTwoName.Length == 0)
-            {
-                secondPlayerName = "Player 2";
-            }
-            else
-            {
-                secondPlayerName = playerTwoName;
+                if (playerTwoName.Length == 0)
+                {
+                    secondPlayerName = "Player 2";
+                }
+
+                else
+                {
+                    secondPlayerName = playerTwoName;
+                }
+
+                pressedKey = Console.ReadKey();
+                if (pressedKey.Key == ConsoleKey.Escape)
+                {
+                    Console.Clear();
+                    Menu();
+                }
             }
 
         }
 
         static void BuildTerrainFromFile()
         {
-           //string filePath = Console.ReadLine();
-            string filePath = "terrain_1.txt";
+            //string filePath = Console.ReadLine();
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain_1.txt";
             terrain = new char[terrainHeight, terrainWidth];
-            System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
-            StringBuilder builder = new StringBuilder();
-            for (int row = 0; row < terrainHeight; row++)
+            try
             {
-                string currentLine = reader.ReadLine();
-                for (int col = 0; col < currentLine.Length; col++)
+                if (!System.IO.File.Exists(filePath))
                 {
-                    terrain[row, col] = currentLine[col];
+                    throw new System.IO.FileNotFoundException();
                 }
+                System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
+                StringBuilder builder = new StringBuilder();
+                for (int row = 0; row < terrainHeight; row++)
+                {
+                    string currentLine = reader.ReadLine();
+                    for (int col = 0; col < currentLine.Length; col++)
+                    {
+                        terrain[row, col] = currentLine[col];
+                    }
+                }
+                for (int row = 0; row < terrainHeight; row++)
+                {
+                    for (int col = 0; col < terrainWidth; col++)
+                    {
+                        builder.Append(terrain[row, col]);
+                    }
+                }
+                reader.Close();
             }
-            for (int row = 0; row < terrainHeight; row++)
+            catch (System.IO.FileNotFoundException ex)
             {
-                for (int col = 0; col < terrainWidth; col++)
-                {
-                    builder.Append(terrain[row, col]);
-                }
+                Console.WriteLine(ex.Message);
+                isRandomTerrain = true;
+                BuildRandomTerrain();
             }
-            reader.Close();
+            catch
+            {
+                Console.WriteLine("Fatal exception");
+                isRandomTerrain = true;
+            }
         }
 
         static void BuildRandomTerrain()
