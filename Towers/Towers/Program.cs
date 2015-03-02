@@ -42,7 +42,7 @@ namespace Towers
         static char[,] terrain;
         static byte menuChoice = 1;
         static string gameName = "## T - O - W - E - R - S ##";
-        static bool isRandomTerrain = false;
+        static bool isRandomTerrain = true;
 
         static void Main()
         {
@@ -271,26 +271,44 @@ namespace Towers
         static void BuildTerrainFromFile()
         {
            //string filePath = Console.ReadLine();
-            string filePath = "terrain_1.txt";
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain_1.txt";
             terrain = new char[terrainHeight, terrainWidth];
-            System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
-            StringBuilder builder = new StringBuilder();
-            for (int row = 0; row < terrainHeight; row++)
+            try
             {
-                string currentLine = reader.ReadLine();
-                for (int col = 0; col < currentLine.Length; col++)
+                if (!System.IO.File.Exists(filePath))
                 {
-                    terrain[row, col] = currentLine[col];
+                    throw new System.IO.FileNotFoundException();
                 }
+                System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
+                StringBuilder builder = new StringBuilder();
+                for (int row = 0; row < terrainHeight; row++)
+                {
+                    string currentLine = reader.ReadLine();
+                    for (int col = 0; col < currentLine.Length; col++)
+                    {
+                        terrain[row, col] = currentLine[col];
+                    }
+                }
+                for (int row = 0; row < terrainHeight; row++)
+                {
+                    for (int col = 0; col < terrainWidth; col++)
+                    {
+                        builder.Append(terrain[row, col]);
+                    }
+                }
+                reader.Close();
             }
-            for (int row = 0; row < terrainHeight; row++)
+            catch (System.IO.FileNotFoundException ex)
             {
-                for (int col = 0; col < terrainWidth; col++)
-                {
-                    builder.Append(terrain[row, col]);
-                }
+                Console.WriteLine(ex.Message);
+                isRandomTerrain = true;
+                BuildRandomTerrain();
             }
-            reader.Close();
+            catch
+            {
+                Console.WriteLine("Fatal exception");
+                isRandomTerrain = true;
+            }
         }
 
         static void BuildRandomTerrain()
