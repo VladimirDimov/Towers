@@ -42,10 +42,9 @@ namespace Towers
         static char[,] terrain;
         static byte menuChoice = 1;
         static string gameName = "## T - O - W - E - R - S ##";
-<<<<<<< HEAD
+
         static ConsoleKeyInfo pressedKey;
-=======
->>>>>>> 943c02f7dbd1b9c8e14df28ae00de830607248fc
+
         static bool isRandomTerrain = true;
 
         static void Main()
@@ -446,11 +445,10 @@ namespace Towers
 
         static void BuildTerrainFromFile()
         {
-<<<<<<< HEAD
+
             //string filePath = Console.ReadLine();
-=======
+
            //string filePath = Console.ReadLine();
->>>>>>> 943c02f7dbd1b9c8e14df28ae00de830607248fc
             string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain_1.txt";
             terrain = new char[terrainHeight, terrainWidth];
             try
