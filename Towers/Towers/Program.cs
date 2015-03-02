@@ -42,7 +42,7 @@ namespace Towers
         static char[,] terrain;
         static byte menuChoice = 1;
         static string gameName = "## T - O - W - E - R - S ##";
-
+        static bool isRandomTerrain = false;
 
         static void Main()
         {
@@ -68,7 +68,14 @@ namespace Towers
 
         static void Game()
         {
-            BuildRandomTerrain();
+            if (isRandomTerrain == true)
+            {
+                BuildRandomTerrain();
+            }
+            else
+            {
+                BuildTerrainFromFile();
+            }
             PrintFirstTower(10);
             PrintSecondTower(terrainWidth - 10);
             RestoreLivePoints();
@@ -117,13 +124,13 @@ namespace Towers
                     enterFlag = 1;
                 }
 
-                if (menuChoice > 3)
+                if (menuChoice > 4)
                 {
                     menuChoice = 1;
                 }
                 if (menuChoice < 1)
                 {
-                    menuChoice = 3;
+                    menuChoice = 4;
                 }
 
                 switch (menuChoice)
@@ -146,6 +153,12 @@ namespace Towers
                         if (enterFlag == 1)
                         {
                             Environment.Exit(0);
+                        }
+                        break;
+                    case 4:
+                        if (enterFlag == 1)
+                        {
+                            SetBuildTerrain();
                         }
                         break;
                 }
@@ -186,6 +199,16 @@ namespace Towers
             else
             {
                 Console.WriteLine("Quit Game");
+            }
+
+            Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 8);
+            if (menuChoice == 4)
+            {
+                ColorLine(">Build Map<");
+            }
+            else
+            {
+                Console.WriteLine("Build Map");
             }
 
         }
@@ -245,9 +268,29 @@ namespace Towers
 
         }
 
-        static void BuildTerrainFromFile(char[,] terrain, string file)
+        static void BuildTerrainFromFile()
         {
-            //TODO
+           //string filePath = Console.ReadLine();
+            string filePath = "terrain_1.txt";
+            terrain = new char[terrainHeight, terrainWidth];
+            System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
+            StringBuilder builder = new StringBuilder();
+            for (int row = 0; row < terrainHeight; row++)
+            {
+                string currentLine = reader.ReadLine();
+                for (int col = 0; col < currentLine.Length; col++)
+                {
+                    terrain[row, col] = currentLine[col];
+                }
+            }
+            for (int row = 0; row < terrainHeight; row++)
+            {
+                for (int col = 0; col < terrainWidth; col++)
+                {
+                    builder.Append(terrain[row, col]);
+                }
+            }
+            reader.Close();
         }
 
         static void BuildRandomTerrain()
@@ -345,7 +388,7 @@ namespace Towers
             }
             else
             {
-                BallMovement((secondTowerVelocity-wind) / 2.0, secondTowerAngle, activePlayer);
+                BallMovement((secondTowerVelocity - wind) / 2.0, secondTowerAngle, activePlayer);
             }
             activePlayer = !activePlayer;
         }
@@ -540,7 +583,7 @@ namespace Towers
                     {
                         continue;
                     }
-                    if (terrain[y, x] == '#' || terrain[y, x] == '2' || terrain[y,x] == '1')
+                    if (terrain[y, x] == '#' || terrain[y, x] == '2' || terrain[y, x] == '1')
                     {
                         Impact(y, x);
                         return;
@@ -733,9 +776,9 @@ namespace Towers
             else
             {
                 Console.BackgroundColor = ConsoleColor.DarkGreen;
-                PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5 
-                    + firstPlayerScore.ToString().Length 
-                    + secondPlayerScore.ToString().Length 
+                PrintOnPosition((terrainWidth - currentResult.Length) / 2 + 5
+                    + firstPlayerScore.ToString().Length
+                    + secondPlayerScore.ToString().Length
                     + firstPlayerName.Length, 2, secondPlayerName, ConsoleColor.White);
             }
         }
@@ -780,5 +823,30 @@ namespace Towers
 
             PrintOnPosition(135, 8, windInfo, ConsoleColor.White);
         }
+
+        static void SetBuildTerrain()
+        {
+            Console.WriteLine("Enter an option:");
+            Console.WriteLine("1 - Build from file");
+            Console.WriteLine("2 - Build random terrain");
+            string option = Console.ReadLine();
+            if (option == "1")
+            {
+                isRandomTerrain = false;
+            }
+            else if (option == "2")
+            {
+                isRandomTerrain = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid option");
+                SetBuildTerrain();
+                return;
+            }
+            Console.Clear();
+            Menu();
+        }
+
     }
 }
