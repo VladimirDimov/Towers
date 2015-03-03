@@ -312,6 +312,7 @@ namespace Towers
                 if (pressedKey.Key == ConsoleKey.Escape)
                 {
                     Menu();
+                    return;
                 }
             }
 
