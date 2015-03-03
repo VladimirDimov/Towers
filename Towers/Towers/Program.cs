@@ -433,11 +433,15 @@ namespace Towers
                     secondPlayerName = playerTwoName;
                 }
 
-                pressedKey = Console.ReadKey();
-                if (pressedKey.Key == ConsoleKey.Escape)
+                while (true)
                 {
-                    Console.Clear();
-                    Menu();
+                    pressedKey = Console.ReadKey();
+                    if (pressedKey.Key == ConsoleKey.Escape)
+                    {
+                        Console.Clear();
+                        Menu();
+                        return;
+                    }
                 }
             }
 
