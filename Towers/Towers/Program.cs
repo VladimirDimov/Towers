@@ -56,8 +56,15 @@ namespace Towers
 
         static void SetConsole()
         {
-            Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
-            Console.BufferWidth = Console.WindowWidth = terrainWidth;
+            try
+            {
+                Console.BufferHeight = Console.WindowHeight = terrainHeight + 7;
+                Console.BufferWidth = Console.WindowWidth = terrainWidth;
+            }
+            catch (Exception)
+            {
+                                
+            }
             Console.Title = "TOWERS2015MadeByHornedDemons";
         }
 
@@ -430,16 +437,6 @@ namespace Towers
                     secondPlayerName = playerTwoName;
                 }
 
-                //while (true)
-                //{
-                //    pressedKey = Console.ReadKey();
-                //    if (pressedKey.Key == ConsoleKey.Escape)
-                //    {
-                //        Console.Clear();
-                //        Menu();
-                //        return;
-                //    }
-                //}
                 Menu();
                 return;
             }
