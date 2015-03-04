@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
@@ -452,15 +452,15 @@ namespace Towers
             //string filePath = Console.ReadLine();
 
             //string filePath = Console.ReadLine();
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain_1.txt";
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain.txt";
             terrain = new char[terrainHeight, terrainWidth];
             try
             {
-                if (!System.IO.File.Exists(filePath))
+                if (!File.Exists(filePath))
                 {
-                    throw new System.IO.FileNotFoundException();
+                    throw new FileNotFoundException();
                 }
-                System.IO.StreamReader reader = new System.IO.StreamReader(filePath);
+                StreamReader reader = new StreamReader(filePath);
                 StringBuilder builder = new StringBuilder();
                 for (int row = 0; row < terrainHeight; row++)
                 {
@@ -479,7 +479,7 @@ namespace Towers
                 }
                 reader.Close();
             }
-            catch (System.IO.FileNotFoundException ex)
+            catch (FileNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
                 isRandomTerrain = true;
