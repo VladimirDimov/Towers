@@ -42,9 +42,7 @@ namespace Towers
         static char[,] terrain;
         static byte menuChoice = 1;
         static string gameName = "## T - O - W - E - R - S ##";
-
         static ConsoleKeyInfo pressedKey;
-
         static bool isRandomTerrain = true;
 
         static void Main()
@@ -110,7 +108,7 @@ namespace Towers
         static void Menu()
         {
             byte enterFlag = 0;
-           
+
             while (true)
             {
                 Console.Clear();
@@ -158,6 +156,7 @@ namespace Towers
                         if (enterFlag == 1)
                         {
                             SetBuildTerrain();
+                            return;
                         }
                         break;
 
@@ -165,6 +164,7 @@ namespace Towers
                         if (enterFlag == 1)
                         {
                             HowToPlay();
+                            return;
                         }
                         break;
                     case 5:
@@ -175,6 +175,7 @@ namespace Towers
                         break;
 
                 }
+
                 Console.Clear();
             }
         }
@@ -237,7 +238,7 @@ namespace Towers
 
             Console.ForegroundColor = ConsoleColor.Green;
             string actionPower = "\t    Change Power";
-            string rangePower = "\t\tRange between 0 - 30";
+            string rangePower = "\t\tRange between 0 - 40";
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("{0, 35}", actionPower);
@@ -305,23 +306,21 @@ namespace Towers
 
             Console.ResetColor();
             Console.WriteLine();
+
             while (true)
             {
-
                 pressedKey = Console.ReadKey();
-                if (pressedKey.Key == ConsoleKey.Escape)
+                if (pressedKey.Key == ConsoleKey.Enter)
                 {
                     Menu();
                     return;
                 }
             }
-
         }
 
         private static void DrawMenu()
         {
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length - 6, gameName.Length);
-
             Console.WriteLine(gameName);
 
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 2);
@@ -336,11 +335,11 @@ namespace Towers
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 4);
             if (menuChoice == 2)
             {
-                ColorLine(">Settings<");
+                ColorLine(">Change player names<");
             }
             else
             {
-                Console.WriteLine("Settings");
+                Console.WriteLine("Change player names");
             }
 
             Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 6);
@@ -372,9 +371,6 @@ namespace Towers
             {
                 Console.WriteLine("Quit Game");
             }
-
-
-
         }
 
         static void ColorLine(string value)
@@ -398,7 +394,7 @@ namespace Towers
             while (true)
             {
                 Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 9);
-                Console.Write("Enter Player One Name (default 'PLayer 1'): ");
+                Console.Write("Enter the name of the first player (default 'PLayer 1'): ");
                 string playerOneName = Console.ReadLine().Trim();
 
                 if (playerOneName.Length % 2 == 1)
@@ -416,7 +412,7 @@ namespace Towers
                 }
 
                 Console.SetCursorPosition(Console.WindowWidth / 2 - gameName.Length, gameName.Length + 11);
-                Console.Write("Enter Player Two Name (default 'PLayer 2'): ");
+                Console.Write("Enter the name of the second player (default 'PLayer 2'): ");
                 string playerTwoName = Console.ReadLine().Trim();
 
                 if (playerTwoName.Length % 2 == 1)
@@ -434,16 +430,18 @@ namespace Towers
                     secondPlayerName = playerTwoName;
                 }
 
-                while (true)
-                {
-                    pressedKey = Console.ReadKey();
-                    if (pressedKey.Key == ConsoleKey.Escape)
-                    {
-                        Console.Clear();
-                        Menu();
-                        return;
-                    }
-                }
+                //while (true)
+                //{
+                //    pressedKey = Console.ReadKey();
+                //    if (pressedKey.Key == ConsoleKey.Escape)
+                //    {
+                //        Console.Clear();
+                //        Menu();
+                //        return;
+                //    }
+                //}
+                Menu();
+                return;
             }
 
         }
@@ -453,7 +451,7 @@ namespace Towers
 
             //string filePath = Console.ReadLine();
 
-           //string filePath = Console.ReadLine();
+            //string filePath = Console.ReadLine();
             string filePath = AppDomain.CurrentDomain.BaseDirectory + "terrain_1.txt";
             terrain = new char[terrainHeight, terrainWidth];
             try
@@ -1047,6 +1045,7 @@ namespace Towers
             }
             Console.Clear();
             Menu();
+            return;
         }
 
     }
